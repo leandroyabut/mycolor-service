@@ -49,4 +49,9 @@ class UserServiceTest {
         assertThrows(UserNotFoundException.class, () -> userService.getUserByUsername("nothing"));
     }
 
+    @Test
+    void test_registerUser_returns_user_when_registration_is_successful() {
+
+    }
+
 }

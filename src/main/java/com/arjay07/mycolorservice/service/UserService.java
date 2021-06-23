@@ -16,4 +16,8 @@ public class UserService {
         return userRepository.findById(username).orElseThrow(UserNotFoundException::new);
     }
 
+    public User registerUser(String username, String password) {
+
+    }
+
 }
