@@ -35,7 +35,7 @@ class UserServiceTest {
     private ModelMapper modelMapper;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         RegistrationDTO registration = RegistrationDTO.builder()
                 .name("Test Boy")
                 .username("testboy")
