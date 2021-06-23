@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.arjay07</groupId>
-    <artifactId>user-service</artifactId>
+    <artifactId>my-color-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>user-service</name>
-    <description>Demo project for Spring Boot</description>
+    <name>my-color-service</name>
+    <description>Pick and save your favorite color.</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
