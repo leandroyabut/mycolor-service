@@ -25,7 +25,7 @@ public class UserService {
         return userRepository.findById(username).orElseThrow(UserNotFoundException::new);
     }
 
-    public User registerUser(@Valid RegistrationDTO registration) {
+    public User registerUser(RegistrationDTO registration) {
         User user = modelMapper.map(registration, User.class);
         String password = encoder.encode(registration.getPassword());
         user.setPassword(password);

@@ -2,6 +2,7 @@ package com.arjay07.mycolorservice.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Max;
@@ -23,8 +24,8 @@ public class RegistrationDTO {
 
     @NotNull(message = "Data is invalid.")
     @NotBlank(message = "Password is required")
-    @Min(value = 8, message = "Password must be at least 8 characters.")
-    @Max(value = 16, message = "Password much be no more than 16 characters.")
+    @Length(min = 8, message = "Password must be at least 8 characters.")
+    @Length(max = 64, message = "Password must be no more than 64 characters.")
     private String password;
 
     @NotNull(message = "Data is invalid.")
