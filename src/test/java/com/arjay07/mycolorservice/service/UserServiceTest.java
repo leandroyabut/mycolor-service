@@ -4,6 +4,7 @@ import com.arjay07.mycolorservice.exception.user.UserNotFoundException;
 import com.arjay07.mycolorservice.model.User;
 import com.arjay07.mycolorservice.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -33,6 +34,7 @@ class UserServiceTest {
         when(userRepository.findById("nothing")).thenThrow(UserNotFoundException.class);
     }
 
+    @Test
     void test_getUserByUsername_returns_correct_user_when_user_exists() {
         User user = userService.getUserByUsername("testboy");
 
@@ -42,6 +44,7 @@ class UserServiceTest {
         assertEquals(user.getPassword(), "password");
     }
 
+    @Test
     void test_getUserByUsername_throws_UserNotFoundException_when_user_does_not_exist() {
         assertThrows(UserNotFoundException.class, () -> userService.getUserByUsername("nothing"));
     }
