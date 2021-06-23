@@ -1,4 +1,4 @@
-package com.arjay07.userservice.controller;
+package com.arjay07.mycolorservice.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,4 +1,4 @@
-package com.arjay07.userservice.model;
+package com.arjay07.mycolorservice.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

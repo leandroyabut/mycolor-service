@@ -1,4 +1,4 @@
-package com.arjay07.userservice;
+package com.arjay07.mycolorservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

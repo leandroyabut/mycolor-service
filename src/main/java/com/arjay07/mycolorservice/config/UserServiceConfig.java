@@ -1,4 +1,4 @@
-package com.arjay07.userservice.config;
+package com.arjay07.mycolorservice.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

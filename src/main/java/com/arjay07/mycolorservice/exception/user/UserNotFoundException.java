@@ -1,6 +1,6 @@
-package com.arjay07.userservice.exception.user;
+package com.arjay07.mycolorservice.exception.user;
 
-import com.arjay07.userservice.exception.NotFoundException;
+import com.arjay07.mycolorservice.exception.NotFoundException;
 
 public class UserNotFoundException extends NotFoundException {
     public UserNotFoundException() {

@@ -1,4 +1,4 @@
-package com.arjay07.userservice.controller.advice;
+package com.arjay07.mycolorservice.controller.advice;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 

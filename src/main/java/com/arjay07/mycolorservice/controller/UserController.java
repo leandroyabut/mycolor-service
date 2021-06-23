@@ -1,4 +1,4 @@
-package com.arjay07.userservice.controller;
+package com.arjay07.mycolorservice.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
