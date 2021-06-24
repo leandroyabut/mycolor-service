@@ -1,6 +1,7 @@
 package com.arjay07.mycolorservice.util;
 
 import com.arjay07.mycolorservice.model.Color;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -10,6 +11,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 @RequiredArgsConstructor
+@EqualsAndHashCode
 public class ColorSpecification implements Specification<Color> {
 
     private final String keyword;
