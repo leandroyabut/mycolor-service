@@ -1,13 +1,13 @@
-package com.arjay07.userservice;
+package com.arjay07.mycolorservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class UserServiceApplication {
+public class MyColorServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(UserServiceApplication.class, args);
+        SpringApplication.run(MyColorServiceApplication.class, args);
     }
 
 }
