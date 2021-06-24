@@ -7,13 +7,9 @@ import com.arjay07.mycolorservice.exception.user.UsernameExistsException;
 import com.arjay07.mycolorservice.model.User;
 import com.arjay07.mycolorservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import javax.validation.Valid;
 
 @Service
 @RequiredArgsConstructor
