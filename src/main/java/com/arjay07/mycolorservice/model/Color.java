@@ -24,6 +24,8 @@ public class Color {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    private String name;
+
     @Column(nullable = false)
     private String hex;
 
