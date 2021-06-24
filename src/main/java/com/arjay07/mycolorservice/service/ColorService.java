@@ -1,10 +1,12 @@
 package com.arjay07.mycolorservice.service;
 
+import com.arjay07.mycolorservice.dto.PostColorDTO;
 import com.arjay07.mycolorservice.exception.color.ColorNotFoundException;
 import com.arjay07.mycolorservice.model.Color;
 import com.arjay07.mycolorservice.repository.ColorRepository;
 import com.arjay07.mycolorservice.util.ColorSpecification;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class ColorService {
 
     private final ColorRepository colorRepository;
+    private final ModelMapper modelMapper;
 
     public Color getColorById(int id) {
         return colorRepository.findById(id).orElseThrow(ColorNotFoundException::new);
@@ -32,6 +35,17 @@ public class ColorService {
         return colorRepository.findAll(specification, pageable);
     }
 
-    public Color saveColor(String name, String hex)
+    public Color getColorByName(String name) {
+        return colorRepository.findColorByName(name).orElseThrow(ColorNotFoundException::new);
+    }
+
+    public Color getColorByHex(String hex) {
+        return colorRepository.findColorByHex(hex).orElseThrow(ColorNotFoundException::new);
+    }
+
+    public Color postColor(PostColorDTO postColorDTO) {
+        Color newColor = modelMapper.map(postColorDTO, Color.class);
+        return colorRepository.save(newColor);
+    }
 
 }
