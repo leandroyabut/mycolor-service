@@ -21,8 +21,13 @@ public class ColorService {
         return colorRepository.findById(id).orElseThrow(ColorNotFoundException::new);
     }
 
-    public Page<Color> getColors(int pageNo, int pageSize, String sort, String search) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sort));
+    public Page<Color> getColors(int pageNo, int pageSize, String sort, String order, String search) {
+        Sort sortBy = Sort.by(sort);
+        if (order.toLowerCase().startsWith("asc"))
+            sortBy = sortBy.ascending();
+        if (order.toLowerCase().startsWith("desc"))
+            sortBy = sortBy.descending();
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sortBy);
         ColorSpecification specification = new ColorSpecification(search);
         return colorRepository.findAll(specification, pageable);
     }
