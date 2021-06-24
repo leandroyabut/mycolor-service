@@ -3,6 +3,7 @@ package com.arjay07.mycolorservice.controller;
 import com.arjay07.mycolorservice.dto.RegistrationDTO;
 import com.arjay07.mycolorservice.exception.user.UserNotFoundException;
 import com.arjay07.mycolorservice.model.User;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -83,15 +85,22 @@ class UserControllerIntegrationTest {
     }
 
     @Test
-    void test_registerUser_status_is_badRequest_when_username_already_exists() {
+    void test_registerUser_status_is_badRequest_when_password_is_not_valid() throws Exception {
         RegistrationDTO registration = RegistrationDTO.builder()
                 .username("testboy")
                 .email("user@test.com")
                 .name("New User")
-                .password("P@ssword123")
+                .password("pswrd") // Too short
                 .build();
 
+        String body = mapper.writeValueAsString(registration);
 
-
+        mockMvc.perform(post("/users/registration")
+                .content(body)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.field").value("password"))
+                .andExpect(jsonPath("$.message").value(containsString("Password must be at least")));
     }
 }

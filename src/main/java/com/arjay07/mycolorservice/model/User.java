@@ -7,8 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.UniqueConstraint;
 import java.util.Objects;
 
 @Entity
@@ -23,6 +25,7 @@ public class User {
     @Id
     private String username;
     private String password;
+    @Column(unique = true)
     private String email;
     private String name;
 
