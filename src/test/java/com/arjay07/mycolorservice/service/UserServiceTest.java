@@ -62,7 +62,7 @@ class UserServiceTest {
         assertEquals(user.getUsername(), "testboy");
         assertEquals(user.getName(), "Test Boy");
         assertEquals(user.getEmail(), "testboy@test.com");
-        assertEquals(user.getPassword(), "password");
+        assertEquals(user.getPassword(), "hashed-password");
     }
 
     @Test
