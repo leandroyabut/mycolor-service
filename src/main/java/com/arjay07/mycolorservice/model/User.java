@@ -36,10 +36,6 @@ public class User {
     @JoinColumn(name = "favorite_color_id")
     private Color favoriteColor;
 
-    @ToString.Exclude
-    @OneToMany(mappedBy = "author")
-    private List<Color> postedColors;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -28,15 +28,8 @@ public class Color {
 
     private String name;
 
-    @Column(length = 1500)
-    private String description;
-
     @Column(nullable = false, unique = true)
     private String hex;
-
-    @ManyToOne
-    @JoinColumn(name = "author_id")
-    private User author;
 
     @Override
     public boolean equals(Object o) {
