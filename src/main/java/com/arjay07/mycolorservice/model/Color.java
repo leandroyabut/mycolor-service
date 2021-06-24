@@ -26,7 +26,10 @@ public class Color {
 
     private String name;
 
-    @Column(nullable = false)
+    @Column(length = 1500)
+    private String description;
+
+    @Column(nullable = false, unique = true)
     private String hex;
 
     @Override
