@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -33,6 +35,10 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "favorite_color_id")
     private Color favoriteColor;
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "user")
+    private List<Color> postedColors;
 
     @Override
     public boolean equals(Object o) {

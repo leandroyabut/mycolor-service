@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.util.Objects;
 
 @Entity
@@ -31,6 +33,10 @@ public class Color {
 
     @Column(nullable = false, unique = true)
     private String hex;
+
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private User author;
 
     @Override
     public boolean equals(Object o) {
