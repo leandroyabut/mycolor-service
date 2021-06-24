@@ -4,6 +4,7 @@ import com.arjay07.mycolorservice.dto.RegistrationDTO;
 import com.arjay07.mycolorservice.model.User;
 import com.arjay07.mycolorservice.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,9 @@ public class UserController {
 
     private final UserService userService;
 
+    @Value("${server.port}")
+    private int port;
+
     @GetMapping("/{username}")
     public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
         return ResponseEntity.ok()
@@ -35,6 +39,7 @@ public class UserController {
     public ResponseEntity<User> registerUser(@Valid @RequestBody RegistrationDTO registration) {
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath()
+                .port(port)
                 .path("/users/{username}")
                 .buildAndExpand(registration.getUsername())
                 .toUri();

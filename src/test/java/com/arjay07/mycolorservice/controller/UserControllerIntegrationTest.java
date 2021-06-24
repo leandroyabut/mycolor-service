@@ -4,6 +4,7 @@ import com.arjay07.mycolorservice.dto.RegistrationDTO;
 import com.arjay07.mycolorservice.exception.user.UserNotFoundException;
 import com.arjay07.mycolorservice.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,10 +15,13 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -29,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
+@Slf4j
 class UserControllerIntegrationTest {
 
     @Autowired
@@ -162,5 +167,43 @@ class UserControllerIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.TEXT_PLAIN))
                 .andExpect(content().string("Email already exists."));
+    }
+
+    @Test
+    void test_registerUser_status_is_created_and_user_exists_in_location_from_header_status_is_ok() throws Exception {
+        RegistrationDTO registration = RegistrationDTO.builder()
+                .username("test_boy")
+                .email("test_boy@test.com")
+                .name("Test Boy")
+                .password("P@ssword123")
+                .build();
+
+        String body = mapper.writeValueAsString(registration);
+
+        MvcResult result = mockMvc.perform(post("/users/registration")
+                .content(body)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(header().string("location",
+                        containsString(String.format("/users/%s", registration.getUsername()))))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.username").value("test_boy"))
+                .andExpect(jsonPath("$.email").value("test_boy@test.com"))
+                .andExpect(jsonPath("$.name").value("Test Boy"))
+                .andReturn();
+
+        String hashed = mapper.readValue(
+                result.getResponse().getContentAsString(),
+                User.class).getPassword();
+
+        assertTrue(encoder.matches(registration.getPassword(), hashed));
+
+        String location = (String) result.getResponse().getHeaderValue("location");
+        assertNotNull(location);
+
+        mockMvc.perform(get(URI.create(location)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.username").value("test_boy"));
     }
 }

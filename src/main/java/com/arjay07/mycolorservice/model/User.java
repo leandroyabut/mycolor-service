@@ -37,7 +37,7 @@ public class User {
     private Color favoriteColor;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "author")
     private List<Color> postedColors;
 
     @Override
