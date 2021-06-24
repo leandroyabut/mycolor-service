@@ -1,7 +1,9 @@
 package com.arjay07.mycolorservice.service;
 
 import com.arjay07.mycolorservice.dto.RegistrationDTO;
+import com.arjay07.mycolorservice.exception.user.EmailExistsException;
 import com.arjay07.mycolorservice.exception.user.UserNotFoundException;
+import com.arjay07.mycolorservice.exception.user.UsernameExistsException;
 import com.arjay07.mycolorservice.model.User;
 import com.arjay07.mycolorservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,12 @@ public class UserService {
     }
 
     public User registerUser(RegistrationDTO registration) {
+
+        if (userRepository.existsByUsername(registration.getUsername()))
+            throw new UsernameExistsException();
+        if (userRepository.existsByEmail(registration.getEmail()))
+            throw new EmailExistsException();
+
         User user = modelMapper.map(registration, User.class);
         String password = encoder.encode(registration.getPassword());
         user.setPassword(password);

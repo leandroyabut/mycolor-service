@@ -15,6 +15,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -85,12 +88,12 @@ class UserControllerIntegrationTest {
     }
 
     @Test
-    void test_registerUser_status_is_badRequest_when_password_is_not_valid() throws Exception {
+    void test_registerUser_status_is_badRequest_when_password_is_too_short() throws Exception {
         RegistrationDTO registration = RegistrationDTO.builder()
-                .username("testboy")
+                .username("new_user_1")
                 .email("user@test.com")
                 .name("New User")
-                .password("pswrd") // Too short
+                .password("pswrd")
                 .build();
 
         String body = mapper.writeValueAsString(registration);
@@ -102,5 +105,64 @@ class UserControllerIntegrationTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.field").value("password"))
                 .andExpect(jsonPath("$.message").value(containsString("Password must be at least")));
+    }
+
+    @Test
+    void test_registerUser_status_is_badRequest_when_password_is_too_long() throws Exception {
+        String longPassword = IntStream.range(0, 100 ).mapToObj(i -> "x").collect(Collectors.joining());
+        RegistrationDTO registration = RegistrationDTO.builder()
+                .username("new_user_1")
+                .email("user@test.com")
+                .name("New User")
+                .password(longPassword) // Too long
+                .build();
+
+        String body = mapper.writeValueAsString(registration);
+
+        mockMvc.perform(post("/users/registration")
+                .content(body)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.field").value("password"))
+                .andExpect(jsonPath("$.message").value(containsString("Password must be no more than")));
+    }
+
+    @Test
+    void test_registerUser_status_is_badRequest_when_username_already_exists() throws Exception {
+        RegistrationDTO registration = RegistrationDTO.builder()
+                .username("testboy")
+                .email("testboy@test.com")
+                .name("Test Boy")
+                .password("P@ssword123")
+                .build();
+
+        String body = mapper.writeValueAsString(registration);
+
+        mockMvc.perform(post("/users/registration")
+                .content(body)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.TEXT_PLAIN))
+                .andExpect(content().string("Username already exists."));
+    }
+
+    @Test
+    void test_registerUser_status_is_badRequest_when_email_already_exists() throws Exception {
+        RegistrationDTO registration = RegistrationDTO.builder()
+                .username("testboy_1")
+                .email("testboy@test.com")
+                .name("Test Boy")
+                .password("P@ssword123")
+                .build();
+
+        String body = mapper.writeValueAsString(registration);
+
+        mockMvc.perform(post("/users/registration")
+                .content(body)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.TEXT_PLAIN))
+                .andExpect(content().string("Email already exists."));
     }
 }

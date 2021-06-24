@@ -1,6 +1,7 @@
 package com.arjay07.mycolorservice.controller.advice;
 
 import com.arjay07.mycolorservice.dto.ValidationErrorDTO;
+import com.arjay07.mycolorservice.exception.BadRequestException;
 import com.arjay07.mycolorservice.exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,10 +24,19 @@ public class ExceptionHandlerController {
                 .body(exception.getMessage());
     }
 
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<String> handleBadRequest(BadRequestException exception) {
+        log.error(exception.getMessage(), exception);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.TEXT_PLAIN)
+                .body(exception.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ValidationErrorDTO> handleValidationError(MethodArgumentNotValidException exception) {
         assert exception.getFieldError() != null;
-        log.error("Bad request due to invalid request body: [{}, '{}']", exception.getFieldError().getField(), exception.getFieldError().getDefaultMessage());
+        log.error("Bad request due to invalid request body: [\"{}\", \"{}\"']", exception.getFieldError().getField(), exception.getFieldError().getDefaultMessage());
         ValidationErrorDTO validationError = ValidationErrorDTO.builder()
                 .field(exception.getFieldError().getField())
                 .message(exception.getFieldError().getDefaultMessage()).build();
