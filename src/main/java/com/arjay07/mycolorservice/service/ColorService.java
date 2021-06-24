@@ -32,4 +32,6 @@ public class ColorService {
         return colorRepository.findAll(specification, pageable);
     }
 
+    public Color saveColor(String name, String hex)
+
 }
