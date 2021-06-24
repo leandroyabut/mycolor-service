@@ -10,6 +10,8 @@ import lombok.ToString;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.util.Objects;
 
 @Entity
@@ -27,6 +29,10 @@ public class User {
     @Column(unique = true)
     private String email;
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "favorite_color_id")
+    private Color favoriteColor;
 
     @Override
     public boolean equals(Object o) {
