@@ -1,5 +1,7 @@
 package com.arjay07.mycolorservice.controller;
 
+import com.arjay07.mycolorservice.dto.PostColorDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -7,9 +9,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
+import java.net.URI;
+import java.util.Objects;
+
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -20,6 +29,9 @@ class ColorControllerIntegrationTest {
 
     @Autowired
     private MockMvc mvc;
+
+    @Autowired
+    ObjectMapper mapper;
 
     @Test
     void test_getColorById_status_is_ok_when_color_exists() throws Exception {
@@ -109,6 +121,42 @@ class ColorControllerIntegrationTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.empty").value(true))
                 .andExpect(jsonPath("$.content").isEmpty());
+    }
+
+    @Test
+    void test_postColor_status_is_created_and_location_is_in_header() throws Exception {
+        PostColorDTO postColor = PostColorDTO.builder()
+                .name("Cosmic Latte")
+                .hex("fff8e7").build();
+        String body = mapper.writeValueAsString(postColor);
+        MvcResult result = mvc.perform(post("/colors")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isCreated())
+                .andExpect(header().string("location", containsString("/colors/7")))
+                .andReturn();
+
+        URI location = URI.create((String) Objects.requireNonNull(result.getResponse().getHeaderValue("location")));
+
+        mvc.perform(get(location))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(7))
+                .andExpect(jsonPath("$.name").value("Cosmic Latte"))
+                .andExpect(jsonPath("$.hex").value("fff8e7"));
+    }
+
+    @Test
+    void test_postColor_status_is_badRequest_when_postColorDTO_is_invalid() throws Exception {
+        PostColorDTO postColor = PostColorDTO.builder()
+                .name("No Color")
+                .hex("xxxxxx").build();
+        String body = mapper.writeValueAsString(postColor);
+        mvc.perform(post("/colors")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("not in the correct format")));
     }
 
 }

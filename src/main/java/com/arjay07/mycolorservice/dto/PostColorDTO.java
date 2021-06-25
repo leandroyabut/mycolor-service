@@ -12,6 +12,6 @@ import java.io.Serializable;
 public class PostColorDTO implements Serializable {
     @NotBlank(message = "Color name is required.")
     private String name;
-    @Pattern(regexp = "(^([a-z0-9]{3})$)|(^([a-z0-9]{6})$)", message = "Color hex value is not in the correct format.")
+    @Pattern(regexp = "(^([a-f0-9]{3})$)|(^([a-f0-9]{6})$)", message = "Color hex value is not in the correct format.")
     private String hex;
 }
