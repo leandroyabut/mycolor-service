@@ -10,7 +10,9 @@ import java.util.Optional;
 @Repository
 public interface ColorRepository extends PagingAndSortingRepository<Color, Integer>, JpaSpecificationExecutor<Color> {
 
-    Optional<Color> findColorByHex(String hex);
+    Optional<Color> findColorByHexIgnoreCase(String hex);
     Optional<Color> findColorByNameIgnoreCase(String name);
+    boolean existsByNameIgnoreCase(String name);
+    boolean existsByHexIgnoreCase(String hex);
 
 }

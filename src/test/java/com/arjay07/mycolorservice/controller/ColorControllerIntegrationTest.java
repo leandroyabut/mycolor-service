@@ -1,7 +1,11 @@
 package com.arjay07.mycolorservice.controller;
 
 import com.arjay07.mycolorservice.dto.PostColorDTO;
+import com.arjay07.mycolorservice.exception.color.ColorNameExistsException;
+import com.arjay07.mycolorservice.exception.color.HexExistsException;
+import com.arjay07.mycolorservice.repository.ColorRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -29,6 +33,9 @@ class ColorControllerIntegrationTest {
 
     @Autowired
     private MockMvc mvc;
+
+    @Autowired
+    private ColorRepository repository;
 
     @Autowired
     ObjectMapper mapper;
@@ -101,7 +108,7 @@ class ColorControllerIntegrationTest {
     }
 
     @Test
-    void test_getColors_status_is_ok_and_contains_five_colors_when_search_is_ff() throws Exception {
+    void test_getColors_status_is_ok_and_contains_five_colors_when_search_is_00() throws Exception {
         mvc.perform(get("/colors?search=ff"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -110,8 +117,7 @@ class ColorControllerIntegrationTest {
                 .andExpect(jsonPath("$.content[1].id").value(2))
                 .andExpect(jsonPath("$.content[2].id").value(3))
                 .andExpect(jsonPath("$.content[3].id").value(4))
-                .andExpect(jsonPath("$.content[4].id").value(5))
-                .andExpect(jsonPath("$.content.length()").value(5));
+                .andExpect(jsonPath("$.content[4].id").value(5));
     }
 
     @Test
@@ -157,6 +163,32 @@ class ColorControllerIntegrationTest {
                 .content(body))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(containsString("not in the correct format")));
+    }
+
+    @Test
+    void test_postColor_status_is_badRequest_when_color_name_exists() throws Exception {
+        PostColorDTO postColor = PostColorDTO.builder()
+                .name("Green")
+                .hex("02ff00").build();
+        String body = mapper.writeValueAsString(postColor);
+        mvc.perform(post("/colors")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(new ColorNameExistsException().getMessage()));
+    }
+
+    @Test
+    void test_postColor_status_is_badRequest_when_color_hex_exists() throws Exception {
+        PostColorDTO postColor = PostColorDTO.builder()
+                .name("Dark Blue")
+                .hex("0000ff").build();
+        String body = mapper.writeValueAsString(postColor);
+        mvc.perform(post("/colors")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(new HexExistsException().getMessage()));
     }
 
 }
