@@ -73,10 +73,10 @@ class ColorServiceTest {
                 .build();
 
         when(colorRepository.findById(1)).thenReturn(Optional.of(red));
-        when(colorRepository.findColorByName("Red")).thenReturn(Optional.of(red));
+        when(colorRepository.findColorByNameIgnoreCase("Red")).thenReturn(Optional.of(red));
         when(colorRepository.findColorByHex("ff0000")).thenReturn(Optional.of(red));
         when(colorRepository.findById(2)).thenThrow(ColorNotFoundException.class);
-        when(colorRepository.findColorByName("Green")).thenThrow(ColorNotFoundException.class);
+        when(colorRepository.findColorByNameIgnoreCase("Green")).thenThrow(ColorNotFoundException.class);
         when(colorRepository.findColorByHex("00ff00")).thenThrow(ColorNotFoundException.class);
         when(colorRepository.findAll(colorSpec, pageable)).thenReturn(colorPage);
         when(mapper.map(PostColorDTO.builder()

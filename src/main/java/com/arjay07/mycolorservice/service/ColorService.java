@@ -36,7 +36,7 @@ public class ColorService {
     }
 
     public Color getColorByName(String name) {
-        return colorRepository.findColorByName(name).orElseThrow(ColorNotFoundException::new);
+        return colorRepository.findColorByNameIgnoreCase(name).orElseThrow(ColorNotFoundException::new);
     }
 
     public Color getColorByHex(String hex) {

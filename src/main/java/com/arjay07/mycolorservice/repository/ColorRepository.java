@@ -11,6 +11,6 @@ import java.util.Optional;
 public interface ColorRepository extends PagingAndSortingRepository<Color, Integer>, JpaSpecificationExecutor<Color> {
 
     Optional<Color> findColorByHex(String hex);
-    Optional<Color> findColorByName(String name);
+    Optional<Color> findColorByNameIgnoreCase(String name);
 
 }

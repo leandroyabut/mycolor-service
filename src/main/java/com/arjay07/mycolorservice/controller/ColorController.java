@@ -27,6 +27,22 @@ public class ColorController {
                 .body(colorService.getColorById(id));
     }
 
+    @GetMapping("/name/{name}")
+    public ResponseEntity<Color> getColorByName(@PathVariable String name) {
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(colorService.getColorByName(name));
+    }
+
+    @GetMapping("/hex/{hex}")
+    public ResponseEntity<Color> getColorByHex(@PathVariable String hex) {
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(colorService.getColorByHex(hex));
+    }
+
     @GetMapping("")
     public ResponseEntity<Page<Color>> getColors(
             @RequestParam(defaultValue = "0") int pageNo,
