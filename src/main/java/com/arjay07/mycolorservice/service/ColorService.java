@@ -33,7 +33,7 @@ public class ColorService {
         if (order.toLowerCase().startsWith("desc"))
             sortBy = sortBy.descending();
         Pageable pageable = PageRequest.of(pageNo, pageSize, sortBy);
-        ColorSpecification specification = new ColorSpecification(search);
+        ColorSpecification specification = new ColorSpecification(search.toLowerCase());
         return colorRepository.findAll(specification, pageable);
     }
 
