@@ -3,7 +3,6 @@ package com.arjay07.mycolorservice.controller;
 import com.arjay07.mycolorservice.dto.PostColorDTO;
 import com.arjay07.mycolorservice.exception.color.ColorNameExistsException;
 import com.arjay07.mycolorservice.exception.color.HexExistsException;
-import com.arjay07.mycolorservice.repository.ColorRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +31,6 @@ class ColorControllerIntegrationTest {
 
     @Autowired
     private MockMvc mvc;
-
-    @Autowired
-    private ColorRepository repository;
 
     @Autowired
     ObjectMapper mapper;
