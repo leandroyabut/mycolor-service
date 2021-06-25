@@ -36,7 +36,7 @@ public class ExceptionHandlerController {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ValidationErrorDTO> handleValidationError(MethodArgumentNotValidException exception) {
         assert exception.getFieldError() != null;
-        log.error("Bad request due to invalid request body: [\"{}\", \"{}\"']", exception.getFieldError().getField(), exception.getFieldError().getDefaultMessage());
+        log.error("Bad request due to invalid request body: [\"{}\", \"{}\" ]", exception.getFieldError().getField(), exception.getFieldError().getDefaultMessage());
         ValidationErrorDTO validationError = ValidationErrorDTO.builder()
                 .field(exception.getFieldError().getField())
                 .message(exception.getFieldError().getDefaultMessage()).build();

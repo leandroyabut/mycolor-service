@@ -8,4 +8,5 @@ INSERT INTO color (name, hex)
            ( 'Green', '00ff00' ),
            ( 'Blue', '0000ff' ),
            ( 'Yellow', 'ffff00' ),
-           ( 'Purple', 'ff00ff' );
+           ( 'Purple', 'ff00ff' ),
+           ( 'Dark Red', '800800');

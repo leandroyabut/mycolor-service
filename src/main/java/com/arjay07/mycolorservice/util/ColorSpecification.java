@@ -18,8 +18,11 @@ public class ColorSpecification implements Specification<Color> {
 
     @Override
     public Predicate toPredicate(Root<Color> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-        Predicate namePredicate = builder.like(root.get("name"), keyword);
-        Predicate hexPredicate = builder.like(root.get("hex"), keyword);
-        return builder.or(namePredicate, hexPredicate);
+        if (!keyword.isEmpty()) {
+            Predicate namePredicate = builder.like(builder.lower(root.get("name")), "%" + keyword + "%");
+            Predicate hexPredicate = builder.like(builder.lower(root.get("hex")), "%" + keyword + "%");
+            return builder.or(namePredicate, hexPredicate);
+        }
+        return null;
     }
 }
